@@ -55,6 +55,31 @@ const stories = [
     maritalStatus: "Married, Husband working as Software Engineer",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/7a0d93cf-5ae7-4d6a-bf3c-211359def5ec.jpg"
   }
+  {
+    name: "Sharanamma",
+    education: "B.Tech DRK - ECE",
+    fatherProfession: "Father’ is a Daily wage worker",
+    joinedYear: "2006",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Self employed",
+    package: " 6 LPA",
+    siblings: "  1 Younger brother",
+    maritalStatus: " Married, Husband working in private company
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e06ee21f-20cb-4d33-b854-4a28db1058c7.jpg"
+  },
+  {
+    name: "Ala Sravanthi",
+    education: "B.Tech CBIT - ECE",
+    fatherProfession: "Father is a  Tailor",
+    joinedYear: "2006",
+    studied: "10th, Intermediate, and B.Tech",
+    company: "Bank Of America",
+    designation: " Software Engineer 2",
+    package: " 20 LPA",
+    siblings: " 1 Elder brother physically handicapped",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/b57e5e3a-6913-4c1b-84f2-71cdd2b6d582.jpg"
+  },
   
 ];
 
