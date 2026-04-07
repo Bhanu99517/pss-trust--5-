@@ -17,7 +17,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/976fd28d-8f32-435a-acea-0d4333088197.jpg"
   },
   {
-    name: "Sravan Kumar",
+    name: "Ala Sravanthi",
     education: "B.Tech Mechanical Engineering",
     fatherProfession: "Daily Wage Laborer",
     joinedYear: "2008",
