@@ -14,7 +14,7 @@ const stories = [
     package: "20 LPA",
     siblings: "1 Elder brother physically handicapped",
     maritalStatus: "Married, Husband working as Software Engineer",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/ed1ab243-8f4b-4d5d-8b4b-7116552e3388.jpeg"
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/976fd28d-8f32-435a-acea-0d4333088197.jpg"
   },
   {
     name: "Sravan Kumar",
