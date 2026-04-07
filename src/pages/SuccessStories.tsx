@@ -43,17 +43,17 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/9776d871-24c9-477e-aa8e-55c04ea6b8d4.jpg"
   },
   {
-    name: "Venkatesh Rao",
-    education: "B.Tech Civil Engineering",
-    fatherProfession: "Tailor",
-    joinedYear: "2007",
+    name: "M. Swapna",
+    education: "B.Tech CBIT - ECE",
+    fatherProfession: "Deceased Father was a Daily wages worker",
+    joinedYear: "2006",
     studied: "High School and B.Tech",
-    company: "L&T Construction",
-    designation: "Project Manager",
-    package: "18 LPA",
-    siblings: "No siblings",
-    maritalStatus: "Married",
-    image: "https://picsum.photos/seed/venkatesh/400/400"
+    company: "Capgemini",
+    designation: " Software Engineer",
+    package: "10 LPA",
+    siblings: "1 Elder brother",
+    maritalStatus: "Married, Husband working as Software Engineer",
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/7a0d93cf-5ae7-4d6a-bf3c-211359def5ec.jpg"
   }
   
 ];
