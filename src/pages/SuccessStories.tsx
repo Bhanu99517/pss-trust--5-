@@ -80,7 +80,6 @@ const stories = [
     maritalStatus: " Single",
     image: https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/63e678fc-7588-4fa1-8e27-26c5eb0f6482.jpg"
   }
-  
 ];
 
 export default function SuccessStories() {
