@@ -78,7 +78,7 @@ const stories = [
     package: "12 LPA",
     siblings: " 1 Younger sister and 1 Elder sister",
     maritalStatus: " Single",
-    image: https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/63e678fc-7588-4fa1-8e27-26c5eb0f6482.jpg"
+    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/63e678fc-7588-4fa1-8e27-26c5eb0f6482.jpg"
   }
 ];
 
