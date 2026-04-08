@@ -4,6 +4,9 @@ import { X, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const images = [
   {
+    url : "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/ce5e6912-56eb-4899-9d38-356b63c02685.jpeg"
+  },
+  {
     url: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/42cb9343-6c24-4522-8ac5-0c27336aff3c/aff82b67-7639-4645-833e-b9d51e5441e6.jpg"
   },
   {
