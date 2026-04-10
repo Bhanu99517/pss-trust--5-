@@ -249,6 +249,11 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                           app.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           (app.email && app.email.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesBranch = branchFilter === 'All' || app.trust_branch === branchFilter;
+    
+    // Only show pending_branch, approved, and rejected for branch incharge
+    const allowedStatuses = ['pending_branch', 'approved', 'rejected'];
+    if (!allowedStatuses.includes(app.status)) return false;
+
     const matchesStatus = appFilter === 'All' || app.status === appFilter;
     return matchesSearch && matchesStatus && matchesBranch;
   });
@@ -404,9 +409,7 @@ export default function InchargeDashboard({ onLogout, onChangePassword }: Inchar
                 className="px-4 py-3 rounded-xl border border-slate-100 focus:border-slate-300 outline-none transition-all bg-white text-sm font-medium"
               >
                 <option value="All">All Status</option>
-                <option value="pending_branch">Pending Branch</option>
-                <option value="pending_super">Pending Super</option>
-                <option value="pending_chairman">Pending Chairman</option>
+                <option value="pending_branch">Pending</option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
               </select>
