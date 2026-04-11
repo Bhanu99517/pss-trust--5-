@@ -219,70 +219,7 @@ const stories = [
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/6387d99f-143f-49ac-b272-9fe31bc093c5.png"
   },
   // 16
-  {
-    name: "SURYAVAMSHI VIJAYASHANTI",
-    education: "Engineering at DRK (ECE) JNTU",
-    fatherProfession: "Father’ is a Daily wage worker",
-    joinedYear: "2006",
-    studied: "9th, 10th, Diploma & B.Tech",
-    company: "TEAM LEAD @ TCS",
-    package: "12 LPA",
-    siblings: "1 Elder Sister",
-    maritalStatus: " Married",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
-  },
-  // 17
-  {
-    name: "KUMMARI BHARATHI",
-    education: "Engineering at BVRIT (ECE) JNTU",
-    fatherProfession: "Father’ is a Daily wage worker",
-    joinedYear: "2006",
-    studied: "9th, 10th, Diploma & B.Tech",
-    company: "SR.ENGG @ WIPRO",
-    package: " 11 LPA",
-    siblings: "1 Younger Brother & Sister",
-    maritalStatus: "single",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
-  },
-  // 18
- {
-    name: "REGATI DHANALAXMI",
-    education: "Engineering at GRIET (ECE) JNTU",
-    fatherProfession: "Father’ is a Daily wage worker",
-    joinedYear: "2006",
-    studied: "9th, 10th, Diploma & B.Tech",
-    company: "SR.ENGG @ VALUE LABS",
-    package: "14 LPA",
-    siblings: "1 Elder Sister",
-    maritalStatus: " Married",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
-  },
-  // 19
-  {
-    name: "BRAMHAROUTU RAVIKIRAN",
-    education: "Engineering at Vasavi (CSE) OU",
-    fatherProfession: "Father’ is a Daily wage worker",
-    joinedYear: "2006",
-    studied: "9th, 10th, Diploma & B.E",
-    company: "ANALYST SCRIPT DEV @VALUE LABS",
-    package: "18 LPA",
-    siblings: "1 Elder Brother & 1 Younger Sister",
-    maritalStatus: " Married",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
-  },
-  // 20
-  {
-    name: "DASARI HARINDER",
-    education: "Engineering at GRIET (CSE) JNTU",
-    fatherProfession: "Mason (Deceased)",
-    joinedYear: "2006",
-    studied: "9th, 10th, Diploma & B.Tech",
-    company: "Self employed",
-    package: " 18LPA",
-    siblings: "2 Elder brothers, 1 Younger brother & sister",
-    maritalStatus: "Single",
-    image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
-  }
+ 
   // 21
   // 22
   // 23
