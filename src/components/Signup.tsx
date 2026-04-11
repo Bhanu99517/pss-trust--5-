@@ -36,17 +36,17 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
     sscPercentage: '',
     // Course Info
     courseType: 'diploma' as 'diploma' | 'btech',
+    // Diploma specific
     collegeName: '',
     branch: '',
     yearOfJoining: new Date().getFullYear(),
-    // Diploma specific
     pinNumber: '',
     diplomaPercentage: '',
     // B.Tech specific
     btechCollege: '',
     btechYear: '',
     btechBranch: '',
-    universityName: '',
+    btechPin: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -183,7 +183,7 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
           btech_college: formData.btechCollege,
           btech_year: formData.btechYear,
           btech_branch: formData.btechBranch,
-          university_name: formData.universityName,
+          btech_pin: formData.btechPin,
         }]);
 
       if (dbError) {
@@ -712,8 +712,8 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
                         <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                         <input 
                           type="text" 
-                          name="universityName"
-                          value={formData.universityName}
+                          name="btechPin"
+                          value={formData.btechPin}
                           onChange={handleInputChange}
                           placeholder="B.Tech Pin Number"
                           className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
