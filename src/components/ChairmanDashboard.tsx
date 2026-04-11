@@ -1925,7 +1925,7 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-purple-400 uppercase">University</label>
+                        <label className="text-xs font-bold text-purple-400 uppercase">B.Tech Pin Number</label>
                         <input 
                           type="text"
                           className="w-full px-4 py-3 rounded-xl border border-purple-200 focus:border-purple-900 outline-none transition-all font-medium"
