@@ -48,9 +48,11 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
 
   const [academicRecords, setAcademicRecords] = useState([
     { semester: 'Sem I/I', gpa: '', backlogs: '' },
-    { semester: 'Sem II/I', gpa: '', backlogs: '' },
     { semester: 'Sem I/II', gpa: '', backlogs: '' },
+    { semester: 'Sem II/I', gpa: '', backlogs: '' },
     { semester: 'Sem II/II', gpa: '', backlogs: '' },
+    { semester: 'Sem III/I', gpa: '', backlogs: '' },
+    { semester: 'Sem III/II', gpa: '', backlogs: '' },
   ]);
 
   const [file, setFile] = useState<File | null>(null);
@@ -72,16 +74,17 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
       if (fetchError) throw new Error('Student not found. Please check your SID.');
       
       console.log('Verified student for fee application:', student);
-
+       // Pre-fill branch from student record
       setFormData(prev => ({
         ...prev,
-        fullName: student.full_name,
+        trustBranch: student.trust_branch || '',
         sid: student.trust_id,
-        pinNo: '', // Not in schema yet
-        collegeName: student.college_name || '',
+        fullName: student.full_name,
+        pinNo: student.pin_number, // Not in schema yet
+        collegeName: student.college_name,
         phoneNo: student.mobile_number || '',
         email: student.email || '',
-        trustBranch: student.trust_branch || '', // Pre-fill branch from student record
+        trustAttendance: student.trust_attendance,
       }));
       setIsVerified(true);
     } catch (error: any) {
