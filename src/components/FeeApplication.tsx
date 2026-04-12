@@ -440,7 +440,6 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
                       type="text" 
                       name="academicYear"
                       value={formData.academicYear}
-                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
                     />
                   </div>
