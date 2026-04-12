@@ -35,29 +35,15 @@ export default function AdminLogin({ onBack }: AdminLoginProps) {
         return;
       }
 
-      // Step 2: Sign out AFTER storing password
+      // Step 2: Store password for later re-auth
       sessionStorage.setItem('_tmp_pwd', password);
       
-      await supabase.auth.signOut();
-
-      // Step 3: Send OTP
-      const response = await fetch('/api/send-login-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+      // Step 3: Navigate immediately to OTP page
+      // We pass triggerOtp: true so the OTP page knows to send the code
+      navigate('/admin-otp', { 
+        state: { email, triggerOtp: true },
+        replace: true
       });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // Step 4: Use replace:true so back button doesn't loop
-        navigate('/admin-otp', { 
-          state: { email },
-          replace: true   // ← THIS IS THE KEY FIX
-        });
-      } else {
-        setError('Failed to send OTP. Please try again.');
-      }
     } catch (err) {
       console.error('Login error:', err);
       setError('An unexpected error occurred.');

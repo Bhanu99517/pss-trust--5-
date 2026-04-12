@@ -25,6 +25,28 @@ export default function AdminOtp() {
   }, [resendCooldown]);
 
   useEffect(() => {
+    const initOtp = async () => {
+      if (location.state?.triggerOtp && email) {
+        try {
+          // 1. Sign out to ensure we aren't "logged in" without OTP
+          await supabase.auth.signOut();
+          
+          // 2. Trigger OTP send
+          await fetch('/api/send-login-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+        } catch (err) {
+          console.error('Error initializing OTP:', err);
+        }
+      }
+    };
+
+    initOtp();
+  }, [email, location.state?.triggerOtp]);
+
+  useEffect(() => {
     // Small delay to let sessionStorage settle
     const timer = setTimeout(() => {
       if (!sessionStorage.getItem('_tmp_pwd') || !email) {
