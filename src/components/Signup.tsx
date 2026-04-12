@@ -124,7 +124,14 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
         password: defaultPassword,
       });
 
-      if (authError) throw authError;
+      if (authError) {
+        // Supabase Auth rate limit gives "over_email_send_rate_limit" or similar
+        const msg = authError.message || '';
+        if (msg.toLowerCase().includes('rate') || msg.toLowerCase().includes('limit') || authError.status === 429) {
+          throw new Error('Too many signup attempts. Supabase has a limit of a few signups per hour. Please wait and try again later, or contact the administrator.');
+        }
+        throw authError;
+      }
       if (!authData.user) throw new Error('Signup failed - no user data returned');
 
       // 2. Generate Trust ID (Year-Branch-Serial)

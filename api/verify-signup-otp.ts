@@ -19,7 +19,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .select('*')
       .eq('email', 'CHAIRMAN_SIGNUP_CODE')
       .eq('code', code)
-      .single();
+      .maybeSingle();
 
     if (fetchError || !otpData) {
       return res.status(400).json({ error: 'Invalid verification code.' });
