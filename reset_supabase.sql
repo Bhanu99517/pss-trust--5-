@@ -10,6 +10,8 @@ DROP TABLE IF EXISTS attendance_logs CASCADE;
 DROP TABLE IF EXISTS student_profiles CASCADE;
 DROP TABLE IF EXISTS face_data CASCADE;
 DROP TABLE IF EXISTS daily_attendance CASCADE;
+DROP TABLE IF EXISTS incharges CASCADE;
+DROP TABLE IF EXISTS otp_codes CASCADE;
 
 -- Create students table
 CREATE TABLE students (
@@ -38,14 +40,9 @@ CREATE TABLE students (
     btech_year TEXT,
     btech_branch TEXT,
     university_name TEXT,
+    photo_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
-ALTER TABLE students ADD COLUMN IF NOT EXISTS photo_url TEXT;
-ALTER TABLE attendance ADD COLUMN IF NOT EXISTS method TEXT DEFAULT 'face_recognition';
-ALTER TABLE attendance ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE attendance_faces ADD CONSTRAINT IF NOT EXISTS attendance_faces_student_id_unique UNIQUE (student_id);
-
 
 -- Create attendance table
 CREATE TABLE attendance (
@@ -53,6 +50,8 @@ CREATE TABLE attendance (
     student_id UUID REFERENCES students(id) ON DELETE CASCADE,
     date DATE NOT NULL DEFAULT CURRENT_DATE,
     status TEXT NOT NULL DEFAULT 'present',
+    method TEXT DEFAULT 'face_recognition',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(student_id, date)
 );
 
@@ -62,7 +61,8 @@ CREATE TABLE attendance_faces (
     student_id UUID REFERENCES students(id) ON DELETE CASCADE,
     face_descriptor FLOAT8[] NOT NULL,
     image_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT attendance_faces_student_id_unique UNIQUE (student_id)
 );
 
 -- Storage bucket for faces
@@ -90,35 +90,38 @@ CREATE TABLE applications (
     contribution TEXT,
     file_url TEXT,
     status TEXT DEFAULT 'pending',
+    -- FIX: Added missing comment columns used by InchargeDashboard and SuperInchargeDashboard
+    branch_incharge_comment TEXT,
+    super_incharge_comment TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Enable Row Level Security (RLS) - Optional but recommended for Supabase
+-- Enable Row Level Security (RLS)
 ALTER TABLE students ENABLE ROW LEVEL SECURITY;
 ALTER TABLE attendance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE attendance_faces ENABLE ROW LEVEL SECURITY;
 ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
 
--- Create basic policies (Allow all for now as per app requirements, but can be hardened)
+-- Create basic policies
 CREATE POLICY "Allow all access to students" ON students FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all access to attendance" ON attendance FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all access to attendance_faces" ON attendance_faces FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all access to applications" ON applications FOR ALL USING (true) WITH CHECK (true);
 
 -- Create incharges table
+-- FIX: Added 'role' column (was missing, but used throughout the app for branch_incharge / super_incharge routing)
 CREATE TABLE IF NOT EXISTS incharges (
   id UUID PRIMARY KEY,
   email TEXT NOT NULL,
   full_name TEXT NOT NULL,
   branch TEXT,
+  role TEXT NOT NULL DEFAULT 'branch_incharge' CHECK (role IN ('branch_incharge', 'super_incharge')),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ALTER TABLE incharges ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all access to incharges" ON incharges FOR ALL USING (true) WITH CHECK (true);
 
 -- Create OTP codes table
-DROP TABLE IF EXISTS otp_codes CASCADE;
-
 CREATE TABLE otp_codes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   email TEXT NOT NULL,
@@ -132,9 +135,7 @@ ALTER TABLE otp_codes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public insert" ON otp_codes FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public select" ON otp_codes FOR SELECT USING (true);
 CREATE POLICY "Allow public delete" ON otp_codes FOR DELETE USING (true);
--- Storage bucket for fee documents
-INSERT INTO storage.buckets (id, name, public) VALUES ('fee-documents', 'fee-documents', true) ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('documents', 'documents', true) 
-ON CONFLICT (id) DO NOTHING;
+-- Storage buckets for fee documents
+INSERT INTO storage.buckets (id, name, public) VALUES ('fee-documents', 'fee-documents', true) ON CONFLICT (id) DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('documents', 'documents', true) ON CONFLICT (id) DO NOTHING;

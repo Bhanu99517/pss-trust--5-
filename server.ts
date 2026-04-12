@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 // Initialize Supabase Client
 const supabaseUrl = process.env.VITE_SUPABASE_URL!;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey; // Fallback to anon for now, but service role is needed for auth management
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey;
 const supabase = createClient(supabaseUrl, supabaseKey);
 const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: {
@@ -54,8 +54,41 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// In-memory OTP storage (for demo purposes)
-const loginOtps = new Map<string, { code: string, expires: number }>();
+// FIX: Removed in-memory OTP Map. Login OTPs now stored in Supabase otp_codes table
+// (same as signup OTPs) so they survive server restarts.
+// Uses a special sentinel email key: 'LOGIN_OTP:<email>' to distinguish from signup OTPs.
+
+function loginOtpKey(email: string) {
+  return `LOGIN_OTP:${email}`;
+}
+
+async function storeLoginOtp(email: string, code: string) {
+  const key = loginOtpKey(email);
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 minutes
+  await supabase.from('otp_codes').delete().eq('email', key);
+  const { error } = await supabase.from('otp_codes').insert({ email: key, code, expires_at: expiresAt });
+  if (error) throw error;
+}
+
+async function verifyAndDeleteLoginOtp(email: string, code: string): Promise<boolean> {
+  const key = loginOtpKey(email);
+  const { data, error } = await supabase
+    .from('otp_codes')
+    .select('*')
+    .eq('email', key)
+    .eq('code', code)
+    .single();
+
+  if (error || !data) return false;
+
+  if (new Date(data.expires_at) < new Date()) {
+    await supabase.from('otp_codes').delete().eq('email', key);
+    return false;
+  }
+
+  await supabase.from('otp_codes').delete().eq('email', key);
+  return true;
+}
 
 async function startServer() {
   const app = express();
@@ -63,20 +96,20 @@ async function startServer() {
 
   app.use(express.json());
 
-  // OTP Endpoints for Chairman Login
+  // OTP Endpoints for Admin Login
   app.post("/api/send-login-otp", async (req, res) => {
     try {
       const { email } = req.body;
       if (!email) return res.status(400).json({ error: "Email is required" });
 
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      const expires = Date.now() + 5 * 60 * 1000; // 5 minutes
 
-      loginOtps.set(email, { code: otp, expires });
+      // FIX: Store OTP in Supabase instead of in-memory Map
+      await storeLoginOtp(email, otp);
 
-      // ALWAYS log to console for the user to see in AI Studio logs
+      // Always log to console so the OTP is visible in dev/AI Studio logs
       console.log("------------------------------------------");
-      console.log(`CHAIRMAN LOGIN OTP FOR ${email}: ${otp}`);
+      console.log(`LOGIN OTP FOR ${email}: ${otp}`);
       console.log("------------------------------------------");
 
       const isPlaceholder = process.env.SMTP_USER?.includes('your-email') || process.env.SMTP_PASS?.includes('your-gmail');
@@ -86,11 +119,11 @@ async function startServer() {
           const mailOptions = {
             from: `"PSS Trust" <${process.env.SMTP_USER}>`,
             to: email,
-            subject: "Chairman Login OTP - PSS Trust",
-            text: `Your OTP for Chairman Login is: ${otp}. It will expire in 5 minutes.`,
+            subject: "Admin Login OTP - PSS Trust",
+            text: `Your OTP for Admin Login is: ${otp}. It will expire in 5 minutes.`,
             html: `
               <div style="font-family: sans-serif; padding: 20px; color: #333;">
-                <h2 style="color: #0f172a;">Chairman Login OTP</h2>
+                <h2 style="color: #0f172a;">Admin Login OTP</h2>
                 <p>Your verification code is:</p>
                 <div style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #059669; margin: 20px 0;">${otp}</div>
                 <p>This code will expire in 5 minutes.</p>
@@ -104,12 +137,9 @@ async function startServer() {
           console.log(`OTP sent to ${email}`);
         } catch (mailError) {
           console.error("SMTP Error - falling back to console log:", mailError);
-          // In development/preview, we fall back to console log if SMTP fails
-          // so the user isn't blocked by credential issues.
           console.log(`[FALLBACK OTP] To: ${email}, Code: ${otp}`);
         }
       } else {
-        // Mock for dev
         console.log(`[MOCK OTP] To: ${email}, Code: ${otp}`);
       }
 
@@ -125,19 +155,13 @@ async function startServer() {
       const { email, otp } = req.body;
       if (!email || !otp) return res.status(400).json({ error: "Email and OTP are required" });
 
-      const stored = loginOtps.get(email);
-      if (!stored) return res.status(400).json({ error: "No OTP found for this email" });
+      // FIX: Verify OTP from Supabase instead of in-memory Map
+      const isValid = await verifyAndDeleteLoginOtp(email, otp);
 
-      if (Date.now() > stored.expires) {
-        loginOtps.delete(email);
-        return res.status(400).json({ error: "OTP has expired" });
-      }
-
-      if (stored.code === otp) {
-        loginOtps.delete(email);
+      if (isValid) {
         res.json({ success: true });
       } else {
-        res.status(400).json({ error: "Invalid OTP" });
+        res.status(400).json({ error: "Invalid or expired OTP. Please request a new one." });
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
@@ -148,12 +172,12 @@ async function startServer() {
   // Incharge Management Endpoints
   app.post("/api/create-incharge", async (req, res) => {
     try {
-      const { email, password, fullName, branch } = req.body;
-      
+      const { email, password, fullName, branch, role } = req.body;
+
       if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-        return res.status(500).json({ 
-          success: false, 
-          error: "SUPABASE_SERVICE_ROLE_KEY is not configured. Please add it to environment variables to manage incharge accounts." 
+        return res.status(500).json({
+          success: false,
+          error: "SUPABASE_SERVICE_ROLE_KEY is not configured. Please add it to environment variables to manage incharge accounts."
         });
       }
 
@@ -162,19 +186,21 @@ async function startServer() {
         email,
         password,
         email_confirm: true,
-        user_metadata: { full_name: fullName, role: 'incharge', branch }
+        user_metadata: { full_name: fullName, role: role || 'branch_incharge', branch }
       });
 
       if (authError) throw authError;
 
       // 2. Create Incharge Record in public table
+      // FIX: Include 'role' column in insert (was missing before)
       const { error: dbError } = await supabaseAdmin
         .from('incharges')
         .insert([{
           id: authData.user.id,
           email,
           full_name: fullName,
-          branch
+          branch,
+          role: role || 'branch_incharge'
         }]);
 
       if (dbError) throw dbError;
@@ -191,9 +217,9 @@ async function startServer() {
       const { id, email } = req.body;
 
       if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-        return res.status(500).json({ 
-          success: false, 
-          error: "SUPABASE_SERVICE_ROLE_KEY is not configured." 
+        return res.status(500).json({
+          success: false,
+          error: "SUPABASE_SERVICE_ROLE_KEY is not configured."
         });
       }
 
@@ -255,9 +281,6 @@ async function startServer() {
       const appData = JSON.parse(req.body.data);
       const fileName = req.file ? req.file.filename : null;
 
-      // In a real app, we would upload the file to Supabase Storage
-      // For now, we'll keep it local or just store the filename
-      
       const { error } = await supabase
         .from('applications')
         .insert([{
@@ -283,8 +306,8 @@ async function startServer() {
         .eq('full_name', fullName)
         .eq('trust_id', trustId)
         .single();
-      
-      if (error && error.code !== 'PGRST116') throw error; // PGRST116 is "no rows returned"
+
+      if (error && error.code !== 'PGRST116') throw error;
 
       if (data) {
         res.json({ success: true, student: data });
@@ -365,7 +388,7 @@ async function startServer() {
       } else if (status === 'approved') {
         console.log(`[MOCK EMAIL] To: ${application.email}`);
         console.log(`Subject: Fee Application Approved - PSS Trust`);
-        console.log(`Body: Dear ${application.full_name}, your fee application (ID: ${application.student_id}) has been approved by the Chairman. Please contact the office for further details.`);
+        console.log(`Body: Dear ${application.full_name}, your fee application (ID: ${application.student_id}) has been approved.`);
       }
 
       res.json({ success: true, message: `Application ${status.toLowerCase()} successfully` });
