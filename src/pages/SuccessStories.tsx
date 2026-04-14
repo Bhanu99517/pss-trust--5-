@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Quote, GraduationCap, Briefcase, Award } from 'lucide-react';
+import { Quote, GraduationCap, Briefcase, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const stories = [
-
   {
     name: "Akula Kalyani",
     education: "JNTUH Campus-ECE",
@@ -17,7 +16,6 @@ const stories = [
     maritalStatus: "Married, Husband working as Software Engineer",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/976fd28d-8f32-435a-acea-0d4333088197.jpg"
   },
-      // 1
   {
     name: "AKULA MOUNIKA ",
     education: "9th, 10th, Diploma & B.Tech",
@@ -31,8 +29,7 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1ed7b5aa-b66f-44c3-9447-5e8bb875a2c9.png"
   },
-      // 2
-   {
+  {
     name: "Ala Sravanthi",
     education: "B.Tech CBIT - ECE",
     fatherProfession: "Father is a  Tailor",
@@ -45,8 +42,7 @@ const stories = [
     maritalStatus: "Married, Husband working as Software Engineer",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8b530164-279c-4a82-b164-6ddfa02bcb1b.png"
   },
-  // 3
-   {
+  {
     name: "Ganna Swathi",
     education: "B.Tech CVSR - CIVIL",
     fatherProfession: "Deceased father was a daily wage worker",
@@ -59,7 +55,6 @@ const stories = [
     maritalStatus: "Married, Husband working as Software Engineer",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a026f84a-864a-4f5d-b23e-dee845a5d9f0.png"
   },
-  // 4
   {
     name: "M. Swapna",
     education: "B.Tech CBIT - ECE",
@@ -73,7 +68,6 @@ const stories = [
     maritalStatus: "Married, Husband working as Software Engineer",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/e31b1d5a-3acd-475d-a42c-1e55ed1c047b.png"
   },
-      // 5
   {
     name: "MUDHIGUNDA SANGEETHA",
     education: "9th, 10th, Diploma & B.Tech",
@@ -87,11 +81,10 @@ const stories = [
     maritalStatus: "Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/55a4a666-2981-4bdc-8737-e5a5b966b211.png"
   },
-      // 6
   {
     name: "Sharanamma",
     education: "B.Tech DRK - ECE",
-    fatherProfession: "Father’ is a Daily wage worker",
+    fatherProfession: "Father' is a Daily wage worker",
     joinedYear: "2006",
     studied: "10th, Intermediate, and B.Tech",
     company: "Self employed",
@@ -100,7 +93,6 @@ const stories = [
     maritalStatus: " Married, Husband working in private company",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8a6a2556-bf36-46b5-9d23-656807e35200.png"
   },
-  // 7
   {
     name: "PUJARI NAGALAXMI",
     education: "Engineering at VNR VJIET (ECE) JNTU",
@@ -113,11 +105,10 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/1c322a1f-0a20-46a5-b404-d94451f8274c.png"
   },
-  // 8
   {
     name: "DOLA KUMARI",
     education: "Engineering at GRIET (CIVIL) JNTU",
-    fatherProfession: "Father’ is a Daily wage worker",
+    fatherProfession: "Father' is a Daily wage worker",
     joinedYear: "2006",
     studied: "10th, Intermediate, and B.Tech",
     company: "Self employed",
@@ -126,8 +117,7 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/d021d2b9-df0d-4596-9121-c6e04b3a8e5a.png"
   },
-  // 9
- {
+  {
     name: "P Chamanthi ",
     education: " IIIT Basara-ECE",
     fatherProfession: "Father is a Daily wages worker",
@@ -140,7 +130,6 @@ const stories = [
     maritalStatus: " Single",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/8d9a38bc-c471-49b8-ab12-69df98b2efa2.png"
   },
-  // 10
   {
     name: "AKULA MOUNIKA",
     education: "CSE",
@@ -153,11 +142,10 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/2b01a171-ab6e-4c90-b1e6-9df3f998795f.png"
   },
-  // 11
   {
     name: "MD BHASHEERA",
     education: "Engineering at SNIST (ECE) JNTU",
-    fatherProfession: "Father’ is a Daily wage worker",
+    fatherProfession: "Father' is a Daily wage worker",
     joinedYear: "2006",
     studied: "10th, diploma, and B.Tech",
     company: "Self employed",
@@ -166,7 +154,6 @@ const stories = [
     maritalStatus: "Single",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/a8590aec-6694-44da-84d6-ca90b19ac299.png"
   },
-  // 12
   {
     name: "ALETI CHANDRASHEKAR",
     education: "Engineering at CMR (ECE) JNTU",
@@ -179,11 +166,10 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/5ad856bb-3b82-4871-9823-19f1455facd4.png"
   },
-  // 13
   {
     name: "KONDAPALLY SWATHI",
     education: "Engineering at CMR (ECE)JNTU",
-    fatherProfession: "Father’ is a Daily wage worker",
+    fatherProfession: "Father' is a Daily wage worker",
     joinedYear: "2006",
     studied: "10th, diploma, and B.Tech",
     company: "SW.ENGG @ CONTROL X",
@@ -192,11 +178,10 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/6d74a363-5220-40a8-b15c-bb4325b4944e.png"
   },
-  // 14
   {
     name: "CHINMAMITI VANI",
     education: "Bellevue College of Nursing",
-    fatherProfession: "Father’ is a Daily wage worker",
+    fatherProfession: "Father' is a Daily wage worker",
     joinedYear: "2006",
     studied: "9th, 10th, Inter Nursing",
     company: "Self employed",
@@ -205,11 +190,10 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/841e6330-ae90-4993-b69a-60c93eb4079c.png"
   },
-  // 15
   {
     name: "DOLA PALGUNA",
     education: "Engineering at VNR VJIET (CIVIL) JNTUE",
-    fatherProfession: "Father’ is a Daily wage worker",
+    fatherProfession: "Father' is a Daily wage worker",
     joinedYear: "2006",
     studied: "10th, diploma , and B.Tech",
     company: "QS @ AVS CONSTRUCTIONS",
@@ -218,18 +202,31 @@ const stories = [
     maritalStatus: " Married",
     image: "https://wojpyqvcargyffkyxfln.supabase.co/storage/v1/object/public/shared-files/ab6540cd-1441-4b6e-ac1f-0fae25f0185c/6387d99f-143f-49ac-b272-9fe31bc093c5.png"
   },
-  // 16
- 
-  // 21
-  // 22
-  // 23
-  // 24
-  // 24
-  // 25
-  // 26
 ];
 
+const STORIES_PER_PAGE = 15;
+
 export default function SuccessStories() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(stories.length / STORIES_PER_PAGE);
+  const startIndex = (currentPage - 1) * STORIES_PER_PAGE;
+  const currentStories = stories.slice(startIndex, startIndex + STORIES_PER_PAGE);
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white py-16 lg:py-24 px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
@@ -243,19 +240,19 @@ export default function SuccessStories() {
         </div>
 
         <div className="space-y-8">
-          {stories.map((story, idx) => (
+          {currentStories.map((story, idx) => (
             <motion.div
-              key={idx}
+              key={startIndex + idx}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
               className="bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-100 p-6 lg:p-10 w-full sm:w-full pl-6 sm:pl-6 lg:p-10 mx-auto sm:mx-0"
             >
               <div className="flex flex-col lg:flex-row items-center lg:items-center gap-8 lg:gap-12">
-                {/* Image Frame similar to the image */}
                 <div className="relative w-full max-w-[320px] aspect-square shrink-0">
-                  <img 
-                    src={story.image} 
-                    alt={story.name} 
+                  <img
+                    src={story.image}
+                    alt={story.name}
                     className="w-full h-full object-contain"
                     referrerPolicy="no-referrer"
                   />
@@ -314,17 +311,52 @@ export default function SuccessStories() {
           ))}
         </div>
 
-        <motion.div 
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-6 mt-12 mb-8">
+            <button
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-md
+                ${currentPage === 1
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-teal-700 text-white hover:bg-teal-800 active:scale-95'
+                }`}
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Previous
+            </button>
+
+            <span className="text-slate-600 font-medium text-sm">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all shadow-md
+                ${currentPage === totalPages
+                  ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-teal-700 text-white hover:bg-teal-800 active:scale-95'
+                }`}
+            >
+              Next
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-20 bg-indigo-900 rounded-3xl p-8 lg:p-16 text-center text-white shadow-2xl relative overflow-hidden"
+          className="mt-8 bg-indigo-900 rounded-3xl p-8 lg:p-16 text-center text-white shadow-2xl relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="absolute top-1/4 -left-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
             <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-indigo-400 rounded-full blur-3xl"></div>
           </div>
-          
+
           <div className="relative z-10">
             <GraduationCap className="w-16 h-16 mx-auto mb-6 text-emerald-400" />
             <h2 className="text-2xl lg:text-4xl font-bold mb-6">Join Our Mission of Transformation</h2>
