@@ -38,7 +38,7 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
     // Diploma specific
     collegeName: '',
     branch: '',
-    yearOfJoining: new Date().getFullYear(),
+    yearOfJoining: new Date().getFullYear() - 3,
     pinNumber: '',
     diplomaPercentage: '',
     // B.Tech specific
@@ -612,7 +612,7 @@ export default function Signup({ onBack, onSuccess }: SignupProps) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Year of Joining</label>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Year of Diploma Joining</label>
                   <div className="relative">
                     <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input 
