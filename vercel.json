@@ -8,6 +8,10 @@
       "destination": "/.well-known/$1"
     },
     {
+      "source": "/api/branches/:id",
+      "destination": "/api/branches/index"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
