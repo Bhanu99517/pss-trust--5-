@@ -14,21 +14,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ success: false, error: 'Branch ID is required.' });
   }
 
-  // ── PATCH /api/branches/[id] ──────────────────────────────────────────────
+  // ── PATCH /api/branches/[id]  →  update branch ───────────────────────────
   if (req.method === 'PATCH') {
-    const { name, latitude, longitude, radius } = req.body;
+    const { name, latitude, longitude, radius } = req.body ?? {};
 
-    if (!name || !name.trim()) {
+    if (!name || !String(name).trim()) {
       return res.status(400).json({ success: false, error: 'Branch name is required.' });
     }
 
     const { data, error } = await supabaseAdmin
       .from('branches')
       .update({
-        name: name.trim(),
-        latitude: latitude ?? null,
-        longitude: longitude ?? null,
-        radius: radius ?? 100,
+        name: String(name).trim(),
+        latitude: latitude !== undefined ? latitude : null,
+        longitude: longitude !== undefined ? longitude : null,
+        radius: radius !== undefined ? radius : 100,
       })
       .eq('id', id)
       .select()
@@ -36,7 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (error) {
       if (error.code === '23505') {
-        return res.status(409).json({ success: false, error: `Branch name "${name}" already exists.` });
+        return res.status(409).json({ success: false, error: `Branch "${name}" already exists.` });
       }
       return res.status(500).json({ success: false, error: error.message });
     }
@@ -48,7 +48,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.json({ success: true, branch: data });
   }
 
-  // ── DELETE /api/branches/[id] ─────────────────────────────────────────────
+  // ── DELETE /api/branches/[id]  →  delete branch ──────────────────────────
   if (req.method === 'DELETE') {
     const { error } = await supabaseAdmin
       .from('branches')
@@ -59,5 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.json({ success: true });
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  // ── anything else ─────────────────────────────────────────────────────────
+  res.setHeader('Allow', 'PATCH, DELETE');
+  return res.status(405).json({ error: `Method ${req.method} not allowed` });
 }
