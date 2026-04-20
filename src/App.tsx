@@ -478,6 +478,11 @@ function AppContent() {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/data-retention"   element={<DataRetention />} />
         <Route path="/cookie-policy"    element={<CookiePolicy />} />
+        {/* Legacy redirects */}
+        <Route path="/privacy-policy" element={<Navigate to="/privacy_policy.html" replace />} />
+        <Route path="/terms-of-service" element={<Navigate to="/terms_of_service.html" replace />} />
+        <Route path="/cookie-policy" element={<Navigate to="/cookie_policy.html" replace />} />
+        <Route path="/data-retention-policy" element={<Navigate to="/data_retention.html" replace />} />
         
         <Route path="/signup" element={
           <Signup 
