@@ -474,15 +474,15 @@ function AppContent() {
         <Route path="/success-stories" element={<SuccessStories />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact-us" element={<Contact />} />
-        <Route path="/privacy_policy" element={<PrivacyPolicy />} />
-        <Route path="/terms_of_service" element={<TermsOfService />} />
-        <Route path="/cookie_policy" element={<CookiePolicy />} />
-        <Route path="/data_retention" element={<DataRetention />} />
+        <Route path="/privacy_policy.html" element={<PrivacyPolicy />} />
+        <Route path="/terms_of_service.html" element={<TermsOfService />} />
+        <Route path="/cookie_policy.html" element={<CookiePolicy />} />
+        <Route path="/data_retention.html" element={<DataRetention />} />
         {/* Legacy redirects */}
-        <Route path="/privacy-policy" element={<Navigate to="/privacy_policy" replace />} />
-        <Route path="/terms-of-service" element={<Navigate to="/terms_of_service" replace />} />
-        <Route path="/cookie-policy" element={<Navigate to="/cookie_policy" replace />} />
-        <Route path="/data-retention-policy" element={<Navigate to="/data_retention" replace />} />
+        <Route path="/privacy-policy" element={<Navigate to="/privacy_policy.html" replace />} />
+        <Route path="/terms-of-service" element={<Navigate to="/terms_of_service.html" replace />} />
+        <Route path="/cookie-policy" element={<Navigate to="/cookie_policy.html" replace />} />
+        <Route path="/data-retention-policy" element={<Navigate to="/data_retention.html" replace />} />
         
         <Route path="/signup" element={
           <Signup 
