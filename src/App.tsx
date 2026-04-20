@@ -49,6 +49,7 @@ import Impact from './pages/Impact';
 import Contact from './pages/Contact';
 import Gallery from './pages/Gallery';
 import SuccessStories from './pages/SuccessStories';
+import Legal from './pages/Legal';
 
 import { supabase } from './supabaseClient';
 import { User } from '@supabase/supabase-js';
@@ -305,49 +306,59 @@ function Layout() {
 
       {/* Footer / Bottom Info Section */}
       {!isDashboard && (
-        <footer className="bg-slate-50 py-6 px-6 lg:px-8 border-t border-slate-200">
-          <div className="max-w-7xl mx-auto flex flex-col gap-4">
-
-            {/* Top row — copyright + social */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-              <p className="text-slate-400 text-[10px] lg:text-xs font-bold uppercase tracking-widest text-center md:text-left">
-                © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare &amp; Charitable Trust. All rights reserved.
-              </p>
+        <footer className="bg-white py-12 px-6 lg:px-8 text-slate-600 border-t border-slate-100">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-10">
               <div className="flex items-center gap-4">
-                <a href="https://www.facebook.com/people/PssTrust/100080242307255/" className="text-slate-400 hover:text-blue-600 transition-colors" aria-label="Facebook">
-                  <Facebook className="w-4 h-4" />
+                <img 
+                  src={PSS_LOGO} 
+                  alt="PSS Logo" 
+                  className="w-12 h-12 rounded-full shadow-md border-2 border-white" 
+                  referrerPolicy="no-referrer" 
+                />
+                <div className="flex flex-col">
+                  <span className="text-slate-900 font-extrabold text-lg tracking-tight">PSS Trust</span>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">Charitable Foundation</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mt-[-20px] mb-[-28px]">
+                <a 
+                  href="https://www.facebook.com/people/PssTrust/100080242307255/" 
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-5 h-5" />
                 </a>
-                <a href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" className="text-slate-400 hover:text-blue-700 transition-colors" aria-label="LinkedIn">
-                  <Linkedin className="w-4 h-4" />
+                <a 
+                  href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" 
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="https://www.youtube.com/@psstrust" className="text-slate-400 hover:text-red-600 transition-colors" aria-label="YouTube">
-                  <Youtube className="w-4 h-4" />
+                <a 
+                  href="https://www.youtube.com/@psstrust" 
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-5 h-5" />
                 </a>
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-slate-200" />
-
-            {/* Bottom row — policy links */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2">
-              <a href="/privacy_policy.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
-                Privacy Policy
-              </a>
-              <span className="text-slate-300 text-[10px]">|</span>
-              <a href="/terms_of_service.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
-                Terms of Service
-              </a>
-              <span className="text-slate-300 text-[10px]">|</span>
-              <a href="/data_retention.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
-                Data Retention Policy
-              </a>
-              <span className="text-slate-300 text-[10px]">|</span>
-              <a href="/cookie_policy.html" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
-                Cookie &amp; Storage Policy
-              </a>
+            <div className="flex flex-wrap justify-start gap-x-10 gap-y-4 pt-[20px] pb-[20px] border-y border-slate-50 mb-10">
+              <Link to="/privacy-policy" className="text-xs font-semibold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-wider">Privacy Policy</Link>
+              <Link to="/terms-of-service" className="text-xs font-semibold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-wider">Terms of Service</Link>
+              <Link to="/cookie-policy" className="text-xs font-semibold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-wider">Cookie Policy</Link>
+              <Link to="/data-retention-policy" className="text-xs font-semibold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-wider">Data Retention</Link>
             </div>
 
+            <div className="text-left flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-[-30px] mb-[-20px]">
+              <p className="text-[11px] text-slate-400 font-bold uppercase tracking-[0.1em]">
+                © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare & Charitable Trust
+              </p>
+            </div>
           </div>
         </footer>
       )}
@@ -460,6 +471,10 @@ function AppContent() {
         <Route path="/success-stories" element={<SuccessStories />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact-us" element={<Contact />} />
+        <Route path="/privacy-policy" element={<Legal />} />
+        <Route path="/terms-of-service" element={<Legal />} />
+        <Route path="/cookie-policy" element={<Legal />} />
+        <Route path="/data-retention-policy" element={<Legal />} />
         
         <Route path="/signup" element={
           <Signup 
