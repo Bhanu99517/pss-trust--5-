@@ -311,10 +311,10 @@ function Layout() {
       {/* Footer / Bottom Info Section */}
       {!isDashboard && (
         <footer className="bg-white py-12 px-6 lg:px-8 text-slate-600 border-t border-slate-100">
-          <div className="max-w-7xl mx-auto">
-
-            {/* Row 1 — Brand + Social */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-10">
+          <div className="max-w-7xl mx-auto flex flex-col gap-8">
+            
+            {/* Top Section: Identity + Social */}
+            <div className="flex flex-col gap-6">
               <div className="flex items-center gap-4">
                 <img 
                   src={PSS_LOGO} 
@@ -323,14 +323,17 @@ function Layout() {
                   referrerPolicy="no-referrer" 
                 />
                 <div className="flex flex-col">
-                  <span className="text-slate-900 font-extrabold text-lg tracking-tight">PSS Trust</span>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">Charitable Foundation</span>
+                  <span className="text-slate-900 font-extrabold text-xl tracking-tight leading-none mb-1">PSS Trust</span>
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Charitable Foundation</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 mt-[-20px] mb-[-28px]">
+              {/* Social Icons - Left Aligned */}
+              <div className="flex items-center gap-3">
                 <a 
                   href="https://www.facebook.com/people/PssTrust/100080242307255/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300"
                   aria-label="Facebook"
                 >
@@ -338,6 +341,8 @@ function Layout() {
                 </a>
                 <a 
                   href="https://in.linkedin.com/company/potukuchi-somasundara-social-welfare-and-charitable-trust#" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-blue-700 transition-all duration-300"
                   aria-label="LinkedIn"
                 >
@@ -345,6 +350,8 @@ function Layout() {
                 </a>
                 <a 
                   href="https://www.youtube.com/@psstrust" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all duration-300"
                   aria-label="YouTube"
                 >
@@ -353,36 +360,31 @@ function Layout() {
               </div>
             </div>
 
-            {/* Row 2 — Policy links + Copyright */}
-            <div className="flex flex-wrap justify-start gap-x-10 gap-y-4 pt-[20px] pb-[20px] border-y border-slate-50 mb-10">
-
-              {/* Policy links */}
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2">
-                <Link to="/privacy-policy" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
+            {/* Bottom Section: Links + Copyright */}
+            <div className="pt-8 border-t border-slate-100 flex flex-col gap-6 items-center">
+              
+              {/* Legal Links - Centered */}
+              <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4 w-full">
+                <Link to="/privacy-policy" className="text-[10px] sm:text-xs font-bold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-widest">
                   Privacy Policy
                 </Link>
-                <span className="text-slate-300 text-[10px]">|</span>
-                <Link to="/terms-of-service" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
+                <Link to="/terms-of-service" className="text-[10px] sm:text-xs font-bold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-widest">
                   Terms of Service
                 </Link>
-                <span className="text-slate-300 text-[10px]">|</span>
-                <Link to="/data-retention" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
-                  Data Retention Policy
+                <Link to="/cookie-policy" className="text-[10px] sm:text-xs font-bold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-widest">
+                  Cookie Policy
                 </Link>
-                <span className="text-slate-300 text-[10px]">|</span>
-                <Link to="/cookie-policy" className="text-slate-400 hover:text-slate-700 text-[10px] lg:text-xs font-medium transition-colors">
-                  Cookie &amp; Storage Policy
+                <Link to="/data-retention" className="text-[10px] sm:text-xs font-bold text-slate-500 hover:text-emerald-600 transition-colors uppercase tracking-widest">
+                  Data Retention
                 </Link>
               </div>
 
-              {/* Copyright */}
-              <div className="text-left flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mt-[-30px] mb-[-20px]">
-                <p className="text-[11px] text-slate-400 font-bold uppercase tracking-[0.1em]">
-                  © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare & Charitable Trust
-                </p>
-              </div>
-
+              {/* Copyright - Centered */}
+              <p className="text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase tracking-[0.15em] leading-relaxed text-center">
+                © {new Date().getFullYear()} Potukuchi Somasundara Social Welfare & Charitable Trust
+              </p>
             </div>
+
           </div>
         </footer>
       )}
