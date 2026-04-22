@@ -97,6 +97,14 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
       
       console.log('Verified student for fee application:', student);
 
+      // Read trust_attendance_percentage directly from the students table
+      // (kept up-to-date automatically by a Postgres trigger on the attendance table)
+      const rawPct = student.trust_attendance_percentage;
+      const trustAttendanceValue =
+        rawPct !== null && rawPct !== undefined
+          ? `${parseFloat(rawPct).toFixed(1)}%`
+          : 'N/A';
+
       const studentEmail = student.email;
       setFormData(prev => ({
         ...prev,
@@ -107,7 +115,7 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
         collegeName: student.college_name,
         phoneNo: student.mobile_number,
         email: studentEmail,
-        trustAttendance: student.trust_attendance,
+        trustAttendance: trustAttendanceValue,
       }));
       
       if (!studentEmail) {
@@ -241,7 +249,11 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
           trust_branch: formData.trustBranch,
           academic_records: academicRecords,
           phone_no: formData.phoneNo,
-          email: formData.email, 
+          email: formData.email,
+          trust_attendance: formData.trustAttendance,
+          college_attendance: formData.collegeAttendance,
+          ceep_rank: formData.ceepRank,
+          ecet_rank: formData.ecetRank,
         }])
 
       if (insertError) throw insertError;
@@ -580,13 +592,14 @@ export default function FeeApplication({ onBack }: FeeApplicationProps) {
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   <div>
-                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Trust Att. %</label>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Trust Att. % <span className="text-emerald-500 normal-case font-normal">(auto)</span></label>
                     <input 
+                      readOnly
                       type="text" 
                       name="trustAttendance"
                       value={formData.trustAttendance}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-50 focus:bg-white focus:border-slate-300 outline-none transition-all"
+                      title="Auto-calculated from attendance records"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-100 bg-slate-100 text-slate-500 cursor-not-allowed outline-none transition-all"
                     />
                   </div>
                   <div>

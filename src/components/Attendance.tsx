@@ -236,12 +236,34 @@ export default function Attendance({ onBack }: AttendanceProps) {
         return;
       }
 
-      // Insert attendance
+      // Insert attendance record
       const { error: insertError } = await supabase
         .from('attendance')
         .insert([{ student_id: student.id, status: 'present', method: 'face_recognition' }]);
 
       if (insertError) throw insertError;
+
+      // The Postgres trigger will auto-update trust_attendance_percentage on the
+      // students table. We also do it here immediately so the UI reflects it instantly
+      // if the student opens FeeApplication in the same session.
+      const { data: allLogs } = await supabase
+        .from('attendance')
+        .select('status')
+        .eq('student_id', student.id);
+
+      if (allLogs && allLogs.length > 0) {
+        const totalDays = allLogs.length;
+        const presentDays = allLogs.reduce((acc: number, log: any) => {
+          if (log.status === 'present') return acc + 1;
+          if (log.status === 'H' || log.status === 'HP') return acc + 0.5;
+          return acc;
+        }, 0);
+        const pct = parseFloat(((presentDays / totalDays) * 100).toFixed(2));
+        await supabase
+          .from('students')
+          .update({ trust_attendance_percentage: pct })
+          .eq('id', student.id);
+      }
 
       setIsSuccess(true);
       stopVideo();
