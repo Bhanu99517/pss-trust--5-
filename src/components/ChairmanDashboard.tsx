@@ -86,6 +86,16 @@ interface FeeApplication {
   file_url: string;
   status: string;
   trust_branch?: string;
+  trust_attendance?: string;
+  college_attendance?: string;
+  academic_year?: string;
+  ceep_rank?: string;
+  ecet_rank?: string;
+  phone_no?: string;
+  pin_no?: string;
+  date?: string;
+  requesting_for?: string;
+  live_trust_attendance?: number | null;
   branch_incharge_comment?: string;
   super_incharge_comment?: string;
   chairman_comment?: string;
@@ -439,11 +449,23 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
     try {
       const { data, error } = await supabase
         .from('applications')
-        .select('*')
+        .select('*, students!applications_student_id_fkey(trust_attendance_percentage)')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setApplications(data || []);
+      if (error) {
+        // Fallback without join
+        const { data: fallback, error: e2 } = await supabase
+          .from('applications').select('*').order('created_at', { ascending: false });
+        if (e2) throw e2;
+        setApplications(fallback || []);
+        return;
+      }
+
+      const enriched = (data || []).map((app: any) => ({
+        ...app,
+        live_trust_attendance: app.students?.trust_attendance_percentage ?? null,
+      }));
+      setApplications(enriched);
     } catch (error) {
       console.error('Failed to fetch applications:', error);
     }
@@ -1554,131 +1576,182 @@ export default function ChairmanDashboard({ students, onLogout, onChangePassword
               </div>
 
               <div className="flex-1 overflow-y-auto p-8 space-y-8">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Full Name</p>
-                    <p className="font-bold text-slate-900">{selectedApp.full_name}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">SID</p>
-                    <p className="font-bold text-slate-900">{selectedApp.student_id}</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Branch</p>
-                    <p className="font-bold text-slate-900">{selectedApp.trust_branch}</p>
+
+                {/* ── Section 1: Basic Info ── */}
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="w-4 h-px bg-slate-300 inline-block"></span>Student Info
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Full Name</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.full_name}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">SID</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.student_id}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Trust Branch</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.trust_branch || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">College Name</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.college_name || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Pin Number</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.pin_no || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Phone</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.phone_no || (selectedApp as any).phone_number || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Email</p>
+                      <p className="font-bold text-slate-900 text-sm break-all">{selectedApp.email || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Requesting For</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.requesting_for || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Date</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.date || 'N/A'}</p>
+                    </div>
                   </div>
                 </div>
 
-                {/* Comments Section */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-blue-600" />
-                    Approval History
-                  </h3>
+                {/* ── Section 2: Attendance & Academic Year ── */}
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span className="w-4 h-px bg-slate-300 inline-block"></span>Attendance & Academics
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100">
+                      <p className="text-[10px] font-bold text-emerald-500 uppercase mb-1">Trust Att. % (Live)</p>
+                      <p className="font-bold text-emerald-700 text-lg">
+                        {selectedApp.live_trust_attendance !== null && selectedApp.live_trust_attendance !== undefined
+                          ? `${parseFloat(String(selectedApp.live_trust_attendance)).toFixed(1)}%`
+                          : selectedApp.trust_attendance || 'N/A'}
+                      </p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">College Att. %</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.college_attendance || 'N/A'}</p>
+                    </div>
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Academic Year</p>
+                      <p className="font-bold text-slate-900 text-sm">{selectedApp.academic_year || 'N/A'}</p>
+                    </div>
+                    {selectedApp.ceep_rank ? (
+                      <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">CEEP Rank</p>
+                        <p className="font-bold text-slate-900 text-sm">{selectedApp.ceep_rank}</p>
+                      </div>
+                    ) : null}
+                    {selectedApp.ecet_rank ? (
+                      <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">ECET Rank</p>
+                        <p className="font-bold text-slate-900 text-sm">{selectedApp.ecet_rank}</p>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
+                {/* ── Section 3: Academic Records Table ── */}
+                {selectedApp.academic_records && selectedApp.academic_records.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <span className="w-4 h-px bg-slate-300 inline-block"></span>Academic Performance
+                    </p>
+                    <div className="overflow-x-auto rounded-xl border border-slate-100">
+                      <table className="w-full border-collapse text-sm">
+                        <thead>
+                          <tr className="bg-slate-50">
+                            <th className="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase border-b border-slate-100">Semester / Year</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase border-b border-slate-100">GPA / CGPA</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase border-b border-slate-100">Backlogs</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {selectedApp.academic_records.map((rec: any, idx: number) => (
+                            <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                              <td className="px-4 py-3 font-medium text-slate-700 border-b border-slate-50">{rec.semester || '-'}</td>
+                              <td className="px-4 py-3 text-slate-700 border-b border-slate-50">{rec.gpa || '-'}</td>
+                              <td className="px-4 py-3 border-b border-slate-50">
+                                <span className={`font-bold ${parseInt(rec.backlogs) > 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                                  {rec.backlogs || '0'}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Section 4: Contribution ── */}
+                {selectedApp.contribution && (
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <span className="w-4 h-px bg-slate-300 inline-block"></span>Contribution to Trust
+                    </p>
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                      <p className="text-sm text-slate-700 leading-relaxed">{selectedApp.contribution}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Section 5: Attached Document ── */}
+                {selectedApp.file_url && (
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      <span className="w-4 h-px bg-slate-300 inline-block"></span>Attached Document
+                    </p>
+                    <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                      <FileText className="w-5 h-5 text-emerald-600" />
+                      <div className="flex-1">
+                        <p className="text-xs font-bold text-emerald-900">Request Letter / Supporting Document</p>
+                        <p className="text-xs text-emerald-600">Click to open in new tab</p>
+                      </div>
+                      <a
+                        href={selectedApp.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition-all"
+                      >
+                        View File
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Section 6: Approval History ── */}
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <span className="w-4 h-px bg-slate-300 inline-block"></span>Approval History
+                  </p>
                   <div className="space-y-3">
-                    {selectedApp.branch_incharge_comment && (
+                    {selectedApp.branch_incharge_comment ? (
                       <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Branch Incharge Comment</p>
                         <p className="text-sm text-slate-700 italic">"{selectedApp.branch_incharge_comment}"</p>
                       </div>
-                    )}
-                    {selectedApp.super_incharge_comment && (
+                    ) : null}
+                    {selectedApp.super_incharge_comment ? (
                       <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                         <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Super Incharge Comment</p>
                         <p className="text-sm text-slate-700 italic">"{selectedApp.super_incharge_comment}"</p>
                       </div>
-                    )}
+                    ) : null}
                     {!selectedApp.branch_incharge_comment && !selectedApp.super_incharge_comment && (
-                      <p className="text-xs text-slate-400 italic">No comments from incharges.</p>
+                      <p className="text-xs text-slate-400 italic">No comments from incharges yet.</p>
                     )}
                   </div>
                 </div>
 
-                {/* Request Form Section */}
-                <div className="space-y-6">
-                  <div className="flex items-center gap-2 text-slate-400">
-                    <FileText className="w-4 h-4" />
-                    <span className="text-xs font-bold uppercase tracking-widest">Student Request Form</span>
-                  </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Full Name</p>
-                        <p className="font-bold text-slate-900">{selectedApp.full_name}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">SID</p>
-                        <p className="font-bold text-slate-900">{selectedApp.student_id}</p>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">College</p>
-                        <p className="font-bold text-slate-900">{selectedApp.college_name}</p>
-                      </div>
-                      {selectedApp.phone_number && (
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Phone</p>
-                          <p className="font-bold text-slate-900">{selectedApp.phone_number}</p>
-                        </div>
-                      )}
-                      {selectedApp.email && (
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Email</p>
-                          <p className="font-bold text-slate-900">{selectedApp.email}</p>
-                        </div>
-                      )}
-                    </div>
-
-                    {selectedApp.academic_records && selectedApp.academic_records.length > 0 && (
-                      <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
-                        <h4 className="text-xs font-bold text-slate-400 uppercase mb-4">Academic Records</h4>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          {selectedApp.academic_records.map((rec, i) => (
-                            <div key={i} className="bg-white p-3 rounded-xl border border-slate-100">
-                              <p className="text-[10px] font-bold text-slate-400 uppercase">{rec.semester}</p>
-                              <div className="flex justify-between items-end mt-1">
-                                <span className="text-sm font-bold text-slate-900">GPA: {rec.gpa}</span>
-                                <span className="text-[10px] text-red-500 font-bold">BK: {rec.backlogs}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Contribution towards Trust</h4>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm text-slate-700 leading-relaxed italic">
-                      "{selectedApp.contribution}"
-                    </div>
-                  </div>
-
-                  {selectedApp.file_url && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
-                        <FileText className="w-5 h-5 text-emerald-600" />
-                        <div className="flex-1">
-                          <p className="text-xs font-bold text-emerald-900">Attached Document</p>
-                          <p className="text-xs text-emerald-600">View student's request letter</p>
-                        </div>
-                        <a 
-                          href={selectedApp.file_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg hover:bg-emerald-700 transition-all"
-                        >
-                          View File
-                        </a>
-                      </div>
-                      
-                      <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-100">
-                        <iframe 
-                          src={selectedApp.file_url} 
-                          className="w-full h-[400px] border-none"
-                          title="Document Preview"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
 
               {selectedApp.status === 'pending_chairman' && (
