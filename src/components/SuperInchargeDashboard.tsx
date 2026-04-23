@@ -60,7 +60,6 @@ interface FeeApplication {
   phone_no?: string;
   pin_no?: string;
   date?: string;
-  requesting_for?: string;
   live_trust_attendance?: number | null;
   branch_incharge_comment?: string;
   super_incharge_comment?: string;
