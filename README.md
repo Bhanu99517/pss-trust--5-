@@ -795,7 +795,7 @@ All pull requests must pass:
 | Contributor | Role |
 |---|---|
 | **[G Bhanu Prakash](https://github.com/Bhanu99517)** | Creator & Maintainer |
-| **[Praveen7343](https://github.com/Praveen7343)** | Contributor — Gallery & Success Stories |
+| **[Praveen7343](https://github.com/Praveen7343)** | Contributor — pages design and Face Recognition |
 
 Want to be listed here? Contribute and open a PR! 🙌
 
