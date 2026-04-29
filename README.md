@@ -831,6 +831,6 @@ in the Software without restriction...
 
 Made with ❤️ for **PSS Trust** — *Empowering Students Since 2003*
 
-[🌐 Live Demo](https://pss-trust.vercel.app) · [📧 Contact](https://pss-trust.vercel.app/#contact) · [⭐ Star on GitHub](https://github.com/Bhanu99517/pss-trust-original)
+[🌐 Live Demo](https://pss-trust.vercel.app) · [📧 Contact](https://pss-trust.vercel.app/contact-us) · [⭐ Star on GitHub](https://github.com/Bhanu99517/pss-trust-web)
 
 </div>
