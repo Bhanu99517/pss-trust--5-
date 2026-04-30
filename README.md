@@ -290,7 +290,7 @@ pss-trust-original/
 
 All tables are in the public schema of your Supabase PostgreSQL instance, with **Row Level Security (RLS) enabled** on every table.
 
-![Database Schema](./docs/schema.svg)
+![Database Schema](https://rdnrbgocszptdiljdcvw.supabase.co/storage/v1/object/public/shared-files/7173b553-2c48-4f0a-9338-6c5ee1e3814d/7d257fbc-05fc-4787-9e7b-15709ca80c10.svg)
  
 > *Entity-relationship diagram generated from Supabase Schema Visualizer.*
 
